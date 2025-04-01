@@ -142,11 +142,12 @@ fun QuestionnaireScreen(){
     val mTimeSleep = remember { mutableStateOf("") }
     val mTimeWakeUp = remember { mutableStateOf("") }
 
-    val mTimeMealPickerDialog = TimePickerFun(mTimeMeal)
-    val mTimeSleepPickerDialog = TimePickerFun(mTimeSleep)
-    val mTimeWakeUpPickerDialog = TimePickerFun(mTimeWakeUp)
+    val mTimeMealPickerDialog = timePickerFun(mTimeMeal)
+    val mTimeSleepPickerDialog = timePickerFun(mTimeSleep)
+    val mTimeWakeUpPickerDialog = timePickerFun(mTimeWakeUp)
 
     // Use LaunchedEffect or remember Saveable if you want to restore once
+    // Runs the first time the function runs, not at every change (as it is composable)
     LaunchedEffect (Unit) {
         val sharedPref = mContext.getSharedPreferences("Assignment1", Context.MODE_PRIVATE)
 
@@ -170,71 +171,6 @@ fun QuestionnaireScreen(){
         mTimeSleep.value = loadedTimeSleep.toString()
         mTimeWakeUp.value = loadedTimeWakeUp.toString()
     }
-
-
-    /**
-     * val sharedPref = mContext.getSharedPreferences("Assignment1",
-     *                     Context.MODE_PRIVATE)
-     *
-     *                 val loadedPersona = sharedPref.getString("persona", "")
-     *
-     *                 val loadedTimeMeal = sharedPref.getString("timeMeal", "12:00")
-     *                 val loadedTimeSleep = sharedPref.getString("timeSleep", "12:00")
-     *                 val loadedTimeWakeUp = sharedPref.getString("timeWakeUp", "12:00")
-     *
-     *
-     *                 mCheckBoxFruits.value = loadedFruit
-     *                 mCheckBoxVegetables.value = loadedVegetables
-     *                 mCheckBoxGrains.value = loadedGrains
-     *                 mCheckBoxRedMeat.value = loadedRedMeat
-     *                 mCheckBoxSeafood.value = loadedSeafood
-     *                 mCheckBoxPoultry.value = loadedPoultry
-     *                 mCheckBoxFish.value = loadedFish
-     *                 mCheckBoxEggs.value = loadedEggs
-     *                 mCheckBoxNutsSeeds.value = loadedNutsSeeds
-     *                 mSelectedPersona = loadedPersona.toString()
-     *                 mTimeMeal.value = loadedTimeMeal.toString()
-     *                 mTimeSleep.value = loadedTimeSleep.toString()
-     *                 mTimeWakeUp.value = loadedTimeWakeUp.toString()
-     */
-
-
-
-//
-//    val sharedPref = mContext.getSharedPreferences("Assignment1",
-//                             Context.MODE_PRIVATE)
-//
-//    val loadedFruit = sharedPref.getBoolean("fruits", false)
-//    val loadedVegetables = sharedPref.getBoolean("vegetables", false)
-//    val loadedGrains = sharedPref.getBoolean("grains", false)
-//    val loadedRedMeat = sharedPref.getBoolean("redMeat", false)
-//    val loadedSeafood = sharedPref.getBoolean("seafood", false)
-//    val loadedPoultry = sharedPref.getBoolean("poultry", false)
-//    val loadedFish = sharedPref.getBoolean("fish", false)
-//    val loadedEggs = sharedPref.getBoolean("eggs", false)
-//    val loadedNutsSeeds = sharedPref.getBoolean("nutsSeeds", false)
-//
-//    val loadedPersona = sharedPref.getString("persona", "")
-//
-//    val loadedTimeMeal = sharedPref.getString("timeMeal", "12:00")
-//    val loadedTimeSleep = sharedPref.getString("timeSleep", "12:00")
-//    val loadedTimeWakeUp = sharedPref.getString("timeWakeUp", "12:00")
-
-
-//    mCheckBoxFruits.value = loadedFruit
-//    mCheckBoxVegetables.value = loadedVegetables
-//    mCheckBoxGrains.value = loadedGrains
-//    mCheckBoxRedMeat.value = loadedRedMeat
-//    mCheckBoxSeafood.value = loadedSeafood
-//    mCheckBoxPoultry.value = loadedPoultry
-//    mCheckBoxFish.value = loadedFish
-//    mCheckBoxEggs.value = loadedEggs
-//    mCheckBoxNutsSeeds.value = loadedNutsSeeds
-//    mSelectedPersona = loadedPersona.toString()
-//    mTimeMeal.value = loadedTimeMeal.toString()
-//    mTimeSleep.value = loadedTimeSleep.toString()
-//    mTimeWakeUp.value = loadedTimeWakeUp.toString()
-
 
     Column(
         modifier = Modifier
@@ -476,45 +412,6 @@ fun QuestionnaireScreen(){
             }){
                 Text(text = "Save")
             }
-
-            Button(onClick = {
-                val sharedPref = mContext.getSharedPreferences("Assignment1",
-                    Context.MODE_PRIVATE)
-
-                val loadedFruit = sharedPref.getBoolean("fruits", false)
-                val loadedVegetables = sharedPref.getBoolean("vegetables", false)
-                val loadedGrains = sharedPref.getBoolean("grains", false)
-                val loadedRedMeat = sharedPref.getBoolean("redMeat", false)
-                val loadedSeafood = sharedPref.getBoolean("seafood", false)
-                val loadedPoultry = sharedPref.getBoolean("poultry", false)
-                val loadedFish = sharedPref.getBoolean("fish", false)
-                val loadedEggs = sharedPref.getBoolean("eggs", false)
-                val loadedNutsSeeds = sharedPref.getBoolean("nutsSeeds", false)
-
-                val loadedPersona = sharedPref.getString("persona", "")
-
-                val loadedTimeMeal = sharedPref.getString("timeMeal", "12:00")
-                val loadedTimeSleep = sharedPref.getString("timeSleep", "12:00")
-                val loadedTimeWakeUp = sharedPref.getString("timeWakeUp", "12:00")
-
-
-                mCheckBoxFruits.value = loadedFruit
-                mCheckBoxVegetables.value = loadedVegetables
-                mCheckBoxGrains.value = loadedGrains
-                mCheckBoxRedMeat.value = loadedRedMeat
-                mCheckBoxSeafood.value = loadedSeafood
-                mCheckBoxPoultry.value = loadedPoultry
-                mCheckBoxFish.value = loadedFish
-                mCheckBoxEggs.value = loadedEggs
-                mCheckBoxNutsSeeds.value = loadedNutsSeeds
-                mSelectedPersona = loadedPersona.toString()
-                mTimeMeal.value = loadedTimeMeal.toString()
-                mTimeSleep.value = loadedTimeSleep.toString()
-                mTimeWakeUp.value = loadedTimeWakeUp.toString()
-
-            }) {
-                Text(text = "restore")
-            }
         }
 
 
@@ -732,7 +629,7 @@ fun Persona(){
 }
 
 @Composable
-fun TimePickerFun(mTime: MutableState<String>): TimePickerDialog {
+fun timePickerFun(mTime: MutableState<String>): TimePickerDialog {
     // Get the current context
     val mContext = LocalContext.current
     // Get a calendar instance
@@ -750,7 +647,6 @@ fun TimePickerFun(mTime: MutableState<String>): TimePickerDialog {
         // Listener to be invoked when the time is set
         // Initial hour and minute
         // Whether to use 24-hour format
-
         mContext,
         { _, mHour: Int, mMinute: Int ->
             mTime.value = "$mHour:$mMinute"

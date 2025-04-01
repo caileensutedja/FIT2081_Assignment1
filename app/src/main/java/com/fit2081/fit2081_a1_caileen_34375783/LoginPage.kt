@@ -67,10 +67,10 @@ fun LoginScreen(modifier: Modifier = Modifier) {
     var phoneNoError by remember { mutableStateOf(false) }
     var idList by remember { mutableStateOf(listOf<String>()) }
     var expanded by remember { mutableStateOf(false) }
-    val context = LocalContext.current
+    val mContext = LocalContext.current
 
     LaunchedEffect(Unit) {
-        idList = readIDFromCSV(context, "data.csv")
+        idList = readIDFromCSV(mContext, "data.csv")
     }
     Surface(
         modifier = Modifier.fillMaxSize()
@@ -154,11 +154,19 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(10.dp))
             Button(
                 onClick = {
-                    if (validateLogin(context, "data.csv", userId, userPhone)) {
-                        Toast.makeText(context, "Login Successful", Toast.LENGTH_LONG).show()
-                        context.startActivity(Intent(context, QuestionnairePage::class.java))
+                    if (validateLogin(mContext, "data.csv", userId, userPhone)) {
+                        Toast.makeText(mContext, "Login Successful", Toast.LENGTH_LONG).show()
+
+                        // Store the ID at shared preference
+                        val sharedPref = mContext.getSharedPreferences("Assignment1",
+                            Context.MODE_PRIVATE).edit()
+                        sharedPref.putString("id", userId)
+                        sharedPref.apply()
+
+                        // Move to the next page
+                        mContext.startActivity(Intent(mContext, QuestionnairePage::class.java))
                     } else {
-                        Toast.makeText(context, "Incorrect Credentials", Toast.LENGTH_LONG).show()
+                        Toast.makeText(mContext, "Incorrect Credentials", Toast.LENGTH_LONG).show()
                     }
                 }
             ) {
