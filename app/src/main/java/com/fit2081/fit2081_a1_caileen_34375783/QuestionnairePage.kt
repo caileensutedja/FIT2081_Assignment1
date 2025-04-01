@@ -4,6 +4,7 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -37,6 +38,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -71,13 +73,13 @@ class QuestionnairePage : ComponentActivity() {
                     ) {
                         TopAppBar()
                         QuestionnaireScreen()
-                        }
+                    }
                     }
 
             }
             }
         }
-    }
+}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -120,15 +122,15 @@ fun TopAppBar() {
 fun QuestionnaireScreen(){
     val mContext = LocalContext.current
 
-    var mCheckBoxFruits = remember { mutableStateOf(false) }
-    var mCheckBoxVegetables = remember { mutableStateOf(false) }
-    var mCheckBoxGrains = remember { mutableStateOf(false) }
-    var mCheckBoxRedMeat = remember { mutableStateOf(false) }
-    var mCheckBoxSeafood = remember { mutableStateOf(false) }
-    var mCheckBoxPoultry = remember { mutableStateOf(false) }
-    var mCheckBoxFish = remember { mutableStateOf(false) }
-    var mCheckBoxEggs = remember { mutableStateOf(false) }
-    var mCheckBoxNutsSeeds = remember { mutableStateOf(false) }
+    val mCheckBoxFruits = remember { mutableStateOf(false) }
+    val mCheckBoxVegetables = remember { mutableStateOf(false) }
+    val mCheckBoxGrains = remember { mutableStateOf(false) }
+    val mCheckBoxRedMeat = remember { mutableStateOf(false) }
+    val mCheckBoxSeafood = remember { mutableStateOf(false) }
+    val mCheckBoxPoultry = remember { mutableStateOf(false) }
+    val mCheckBoxFish = remember { mutableStateOf(false) }
+    val mCheckBoxEggs = remember { mutableStateOf(false) }
+    val mCheckBoxNutsSeeds = remember { mutableStateOf(false) }
 
     // For Persona Choice
     val personaChoices = listOf("Health Devotee", "Mindful Eater", "Wellness Striver", "Balance Seeker", "Health Procrastinator", "Food Carefree")
@@ -140,41 +142,98 @@ fun QuestionnaireScreen(){
     val mTimeSleep = remember { mutableStateOf("") }
     val mTimeWakeUp = remember { mutableStateOf("") }
 
-    var mTimeMealPickerDialog = TimePickerFun(mTimeMeal)
-    var mTimeSleepPickerDialog = TimePickerFun(mTimeSleep)
-    var mTimeWakeUpPickerDialog = TimePickerFun(mTimeWakeUp)
+    val mTimeMealPickerDialog = TimePickerFun(mTimeMeal)
+    val mTimeSleepPickerDialog = TimePickerFun(mTimeSleep)
+    val mTimeWakeUpPickerDialog = TimePickerFun(mTimeWakeUp)
 
-    val sharedPref = mContext.getSharedPreferences("Assignment1", Context.MODE_PRIVATE)
+    // Use LaunchedEffect or remember Saveable if you want to restore once
+    LaunchedEffect (Unit) {
+        val sharedPref = mContext.getSharedPreferences("Assignment1", Context.MODE_PRIVATE)
 
-    val loadedFruit = sharedPref.getBoolean("fruits", false)
-    val loadedVegetables = sharedPref.getBoolean("vegetables", false)
-    val loadedGrains = sharedPref.getBoolean("grains", false)
-    val loadedRedMeat = sharedPref.getBoolean("redMeat", false)
-    val loadedSeafood = sharedPref.getBoolean("seafood", false)
-    val loadedPoultry = sharedPref.getBoolean("poultry", false)
-    val loadedFish = sharedPref.getBoolean("fish", false)
-    val loadedEggs = sharedPref.getBoolean("eggs", false)
-    val loadedNutsSeeds = sharedPref.getBoolean("nutsSeeds", false)
+        mCheckBoxFruits.value = sharedPref.getBoolean("fruits", false)
+        mCheckBoxVegetables.value = sharedPref.getBoolean("vegetables", false)
+        mCheckBoxGrains.value = sharedPref.getBoolean("grains", false)
+        mCheckBoxRedMeat.value = sharedPref.getBoolean("redMeat", false)
+        mCheckBoxSeafood.value = sharedPref.getBoolean("seafood", false)
+        mCheckBoxPoultry.value = sharedPref.getBoolean("poultry", false)
+        mCheckBoxFish.value = sharedPref.getBoolean("fish", false)
+        mCheckBoxEggs.value = sharedPref.getBoolean("eggs", false)
+        mCheckBoxNutsSeeds.value = sharedPref.getBoolean("nutsSeeds", false)
+        mCheckBoxVegetables.value = sharedPref.getBoolean("vegetables", false)
 
-    val loadedPersona = sharedPref.getString("persona", "")
+        val loadedPersona = sharedPref.getString("persona", "")
+        val loadedTimeMeal = sharedPref.getString("timeMeal", "12:00")
+        val loadedTimeSleep = sharedPref.getString("timeSleep", "12:00")
+        val loadedTimeWakeUp = sharedPref.getString("timeWakeUp", "12:00")
+        mSelectedPersona = loadedPersona.toString()
+        mTimeMeal.value = loadedTimeMeal.toString()
+        mTimeSleep.value = loadedTimeSleep.toString()
+        mTimeWakeUp.value = loadedTimeWakeUp.toString()
+    }
 
-    val loadedTimeMeal = sharedPref.getString("timeMeal", "12:00")
-    val loadedTimeSleep = sharedPref.getString("timeSleep", "12:00")
-    val loadedTimeWakeUp = sharedPref.getString("timeWakeUp", "12:00")
 
-    mCheckBoxFruits.value = loadedFruit
-    mCheckBoxVegetables.value = loadedVegetables
-    mCheckBoxGrains.value = loadedGrains
-    mCheckBoxRedMeat.value = loadedRedMeat
-    mCheckBoxSeafood.value = loadedSeafood
-    mCheckBoxPoultry.value = loadedPoultry
-    mCheckBoxFish.value = loadedFish
-    mCheckBoxEggs.value = loadedEggs
-    mCheckBoxNutsSeeds.value = loadedNutsSeeds
-    mSelectedPersona = loadedPersona.toString()
-    mTimeMeal.value = loadedTimeMeal.toString()
-    mTimeSleep.value = loadedTimeSleep.toString()
-    mTimeWakeUp.value = loadedTimeWakeUp.toString()
+    /**
+     * val sharedPref = mContext.getSharedPreferences("Assignment1",
+     *                     Context.MODE_PRIVATE)
+     *
+     *                 val loadedPersona = sharedPref.getString("persona", "")
+     *
+     *                 val loadedTimeMeal = sharedPref.getString("timeMeal", "12:00")
+     *                 val loadedTimeSleep = sharedPref.getString("timeSleep", "12:00")
+     *                 val loadedTimeWakeUp = sharedPref.getString("timeWakeUp", "12:00")
+     *
+     *
+     *                 mCheckBoxFruits.value = loadedFruit
+     *                 mCheckBoxVegetables.value = loadedVegetables
+     *                 mCheckBoxGrains.value = loadedGrains
+     *                 mCheckBoxRedMeat.value = loadedRedMeat
+     *                 mCheckBoxSeafood.value = loadedSeafood
+     *                 mCheckBoxPoultry.value = loadedPoultry
+     *                 mCheckBoxFish.value = loadedFish
+     *                 mCheckBoxEggs.value = loadedEggs
+     *                 mCheckBoxNutsSeeds.value = loadedNutsSeeds
+     *                 mSelectedPersona = loadedPersona.toString()
+     *                 mTimeMeal.value = loadedTimeMeal.toString()
+     *                 mTimeSleep.value = loadedTimeSleep.toString()
+     *                 mTimeWakeUp.value = loadedTimeWakeUp.toString()
+     */
+
+
+
+//
+//    val sharedPref = mContext.getSharedPreferences("Assignment1",
+//                             Context.MODE_PRIVATE)
+//
+//    val loadedFruit = sharedPref.getBoolean("fruits", false)
+//    val loadedVegetables = sharedPref.getBoolean("vegetables", false)
+//    val loadedGrains = sharedPref.getBoolean("grains", false)
+//    val loadedRedMeat = sharedPref.getBoolean("redMeat", false)
+//    val loadedSeafood = sharedPref.getBoolean("seafood", false)
+//    val loadedPoultry = sharedPref.getBoolean("poultry", false)
+//    val loadedFish = sharedPref.getBoolean("fish", false)
+//    val loadedEggs = sharedPref.getBoolean("eggs", false)
+//    val loadedNutsSeeds = sharedPref.getBoolean("nutsSeeds", false)
+//
+//    val loadedPersona = sharedPref.getString("persona", "")
+//
+//    val loadedTimeMeal = sharedPref.getString("timeMeal", "12:00")
+//    val loadedTimeSleep = sharedPref.getString("timeSleep", "12:00")
+//    val loadedTimeWakeUp = sharedPref.getString("timeWakeUp", "12:00")
+
+
+//    mCheckBoxFruits.value = loadedFruit
+//    mCheckBoxVegetables.value = loadedVegetables
+//    mCheckBoxGrains.value = loadedGrains
+//    mCheckBoxRedMeat.value = loadedRedMeat
+//    mCheckBoxSeafood.value = loadedSeafood
+//    mCheckBoxPoultry.value = loadedPoultry
+//    mCheckBoxFish.value = loadedFish
+//    mCheckBoxEggs.value = loadedEggs
+//    mCheckBoxNutsSeeds.value = loadedNutsSeeds
+//    mSelectedPersona = loadedPersona.toString()
+//    mTimeMeal.value = loadedTimeMeal.toString()
+//    mTimeSleep.value = loadedTimeSleep.toString()
+//    mTimeWakeUp.value = loadedTimeWakeUp.toString()
 
 
     Column(
@@ -184,6 +243,7 @@ fun QuestionnaireScreen(){
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+
         HorizontalDivider()
         Spacer(modifier = Modifier.height(8.dp))
         Text(
@@ -207,7 +267,11 @@ fun QuestionnaireScreen(){
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(
                             checked = mCheckBoxFruits.value,
-                            onCheckedChange = { mCheckBoxFruits.value = it })
+                            onCheckedChange = {
+                                mCheckBoxFruits.value = it
+                                Log.d("mCheckBoxFruits",it.toString())
+                                Log.d("mCheckBoxFruits",mCheckBoxFruits.value.toString())
+                            })
                         Text(text = "Fruits")
                     }
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -384,31 +448,76 @@ fun QuestionnaireScreen(){
                 Text(text = "Selected time: ${mTimeWakeUp.value}", fontSize = 7.sp)
             }
         }
-        Button(onClick = {
-            val sharedPref = mContext.getSharedPreferences("Assignment1", Context.MODE_PRIVATE).edit()
 
-            sharedPref.putBoolean("fruits", mCheckBoxFruits.value)
-            sharedPref.putBoolean("vegetables", mCheckBoxVegetables.value)
-            sharedPref.putBoolean("grains", mCheckBoxGrains.value)
-            sharedPref.putBoolean("redMeat", mCheckBoxRedMeat.value)
-            sharedPref.putBoolean("seafood", mCheckBoxSeafood.value)
-            sharedPref.putBoolean("poultry", mCheckBoxPoultry.value)
-            sharedPref.putBoolean("fish", mCheckBoxFish.value)
-            sharedPref.putBoolean("eggs", mCheckBoxEggs.value)
-            sharedPref.putBoolean("nutsSeeds", mCheckBoxNutsSeeds.value)
+        Row {
+            Button(onClick = {
+                val sharedPref = mContext.getSharedPreferences("Assignment1",
+                    Context.MODE_PRIVATE).edit()
 
-            sharedPref.putString("persona", mSelectedPersona)
+                sharedPref.putBoolean("fruits", mCheckBoxFruits.value)
+                sharedPref.putBoolean("vegetables", mCheckBoxVegetables.value)
+                sharedPref.putBoolean("grains", mCheckBoxGrains.value)
+                sharedPref.putBoolean("redMeat", mCheckBoxRedMeat.value)
+                sharedPref.putBoolean("seafood", mCheckBoxSeafood.value)
+                sharedPref.putBoolean("poultry", mCheckBoxPoultry.value)
+                sharedPref.putBoolean("fish", mCheckBoxFish.value)
+                sharedPref.putBoolean("eggs", mCheckBoxEggs.value)
+                sharedPref.putBoolean("nutsSeeds", mCheckBoxNutsSeeds.value)
 
-            sharedPref.putString("timeMeal", mTimeMeal.value)
-            sharedPref.putString("timeSleep", mTimeSleep.value)
-            sharedPref.putString("timeWakeUp", mTimeWakeUp.value)
+                sharedPref.putString("persona", mSelectedPersona)
 
-            sharedPref.apply()
+                sharedPref.putString("timeMeal", mTimeMeal.value)
+                sharedPref.putString("timeSleep", mTimeSleep.value)
+                sharedPref.putString("timeWakeUp", mTimeWakeUp.value)
 
-            mContext.startActivity(Intent(mContext, HomeScreen::class.java))
-        }){
-            Text(text = "Save")
+                sharedPref.apply()
+
+                mContext.startActivity(Intent(mContext, HomeScreen::class.java))
+            }){
+                Text(text = "Save")
+            }
+
+            Button(onClick = {
+                val sharedPref = mContext.getSharedPreferences("Assignment1",
+                    Context.MODE_PRIVATE)
+
+                val loadedFruit = sharedPref.getBoolean("fruits", false)
+                val loadedVegetables = sharedPref.getBoolean("vegetables", false)
+                val loadedGrains = sharedPref.getBoolean("grains", false)
+                val loadedRedMeat = sharedPref.getBoolean("redMeat", false)
+                val loadedSeafood = sharedPref.getBoolean("seafood", false)
+                val loadedPoultry = sharedPref.getBoolean("poultry", false)
+                val loadedFish = sharedPref.getBoolean("fish", false)
+                val loadedEggs = sharedPref.getBoolean("eggs", false)
+                val loadedNutsSeeds = sharedPref.getBoolean("nutsSeeds", false)
+
+                val loadedPersona = sharedPref.getString("persona", "")
+
+                val loadedTimeMeal = sharedPref.getString("timeMeal", "12:00")
+                val loadedTimeSleep = sharedPref.getString("timeSleep", "12:00")
+                val loadedTimeWakeUp = sharedPref.getString("timeWakeUp", "12:00")
+
+
+                mCheckBoxFruits.value = loadedFruit
+                mCheckBoxVegetables.value = loadedVegetables
+                mCheckBoxGrains.value = loadedGrains
+                mCheckBoxRedMeat.value = loadedRedMeat
+                mCheckBoxSeafood.value = loadedSeafood
+                mCheckBoxPoultry.value = loadedPoultry
+                mCheckBoxFish.value = loadedFish
+                mCheckBoxEggs.value = loadedEggs
+                mCheckBoxNutsSeeds.value = loadedNutsSeeds
+                mSelectedPersona = loadedPersona.toString()
+                mTimeMeal.value = loadedTimeMeal.toString()
+                mTimeSleep.value = loadedTimeSleep.toString()
+                mTimeWakeUp.value = loadedTimeWakeUp.toString()
+
+            }) {
+                Text(text = "restore")
+            }
         }
+
+
     }
 
 }
