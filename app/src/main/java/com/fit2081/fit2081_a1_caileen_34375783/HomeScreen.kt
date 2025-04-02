@@ -2,15 +2,14 @@ package com.fit2081.fit2081_a1_caileen_34375783
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Paint.Align
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,28 +17,31 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -47,6 +49,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.fit2081.fit2081_a1_caileen_34375783.ui.theme.FIT2081_A1_Caileen_34375783Theme
 
 class HomeScreen : ComponentActivity() {
@@ -55,7 +61,12 @@ class HomeScreen : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             FIT2081_A1_Caileen_34375783Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                val navController: NavHostController = rememberNavController()
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    bottomBar = {
+                        BottomBar(navController)
+                    }) { innerPadding ->
                     Column(
                         modifier = Modifier
                             .padding(innerPadding)
@@ -63,6 +74,7 @@ class HomeScreen : ComponentActivity() {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         HomePage()
+                        MyNavHost(innerPadding, navController)
                     }
                 }
             }
@@ -138,7 +150,9 @@ fun HomePage() {
                 textAlign = TextAlign.Start,
                 modifier = Modifier.weight(1f) // to put the button on the far right
             )
-            Button(onClick = {},
+            Button(onClick = {
+                mContext.startActivity(Intent(mContext, InsightsPage::class.java))
+            },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
 
                 ) {
@@ -194,12 +208,80 @@ fun HomePage() {
             fontSize = 12.sp,
             lineHeight = 17.sp
             )
-        BottomBar()
     }
 }
 
-@Preview (showBackground = true)
 @Composable
-fun BottomBar(){
+fun MyNavHost(
+    innerPadding: PaddingValues,
+    navController: NavHostController) {
+    val mContext = LocalContext.current
+    NavHost(
+        navController = navController,
+        startDestination = "Home"
+    ) {
+        composable("Home") {
+            mContext.startActivity(Intent(mContext, HomeScreen::class.java))
+        }
+        composable("Insights") {
+            mContext.startActivity(Intent(mContext, InsightsPage::class.java))
+        }
+        composable("NutriCoach") {
+            // To be implemented next assignment: NutriCoach Screen
+        }
+        composable("Settings") {
+            // To be implemented next assignment: Settings Screen
+        }
 
+    }
+}
+
+//@Preview(showBackground = true)
+@Composable
+fun BottomBar(navController: NavHostController) {
+    var selectedItem by remember { mutableStateOf(0) }
+
+    val items = listOf(
+        "Home",
+        "Insights",
+        "NutriCoach",
+        "Settings"
+    )
+    NavigationBar {
+        items.forEachIndexed { index, item ->
+            NavigationBarItem(
+                icon = {
+                    when (item) {
+                        "Home" -> Icon(
+                            Icons.Filled.Home,
+                            contentDescription = "Home"
+                        )
+
+                        "Insights" -> Icon(
+                            Icons.Outlined.Info,
+                            contentDescription = "Insights"
+                        )
+
+                        "NutriCoach" -> Icon(
+                            Icons.Rounded.Person,
+                            contentDescription = "NutriCoach"
+                        )
+
+                        "Settings" -> Icon(
+                            Icons.Filled.Settings,
+                            contentDescription = "Settings"
+                        )
+                    }
+                },
+                label = {
+                    Text(item)
+                },
+                selected = selectedItem == index,
+                onClick = {
+                    selectedItem = index
+                    navController.navigate(item)
+                }
+            )
+        }
+    }
 }
