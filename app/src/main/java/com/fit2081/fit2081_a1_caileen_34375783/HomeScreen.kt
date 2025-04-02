@@ -9,7 +9,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -46,7 +45,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -73,8 +71,7 @@ class HomeScreen : ComponentActivity() {
                             .fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        HomePage()
-                        MyNavHost(innerPadding, navController)
+                        MyNavHost(navController)
                     }
                 }
             }
@@ -83,9 +80,8 @@ class HomeScreen : ComponentActivity() {
 }
 
 
-@Preview(showBackground = true)
 @Composable
-fun HomePage() {
+fun HomePage(navController: NavHostController) {
     val mContext = LocalContext.current
     val sharedPref = mContext.getSharedPreferences("Assignment1", Context.MODE_PRIVATE)
     val mID = sharedPref.getString("id", "")
@@ -117,8 +113,7 @@ fun HomePage() {
             )
             Button (
                 onClick = {
-                mContext.startActivity(Intent(mContext, QuestionnairePage::class.java))
-            }){
+                    mContext.startActivity(Intent(mContext, QuestionnairePage::class.java))           }){
                 Icon(
                     imageVector = Icons.Default.Edit,
                     contentDescription = "Edit",
@@ -151,7 +146,9 @@ fun HomePage() {
                 modifier = Modifier.weight(1f) // to put the button on the far right
             )
             Button(onClick = {
-                mContext.startActivity(Intent(mContext, InsightsPage::class.java))
+                navController.navigate("Insights")
+//                InsightsScreen()
+//                mContext.startActivity(Intent(mContext, InsightsPage::class.java))
             },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
 
@@ -183,11 +180,10 @@ fun HomePage() {
                 text = "Your Food Quality Score",
                 modifier = Modifier.fillMaxWidth(0.8f)
             )
-            Text(
-                text = "score/100",
-                color = Color.Green,
-                fontWeight = FontWeight.Bold
-            )
+            Text(text = calculateTotalScore(),
+            color = Color.Green,
+            fontWeight = FontWeight.Bold
+        )
         }
         Spacer(modifier = Modifier.height(20.dp))
         HorizontalDivider()
@@ -213,18 +209,18 @@ fun HomePage() {
 
 @Composable
 fun MyNavHost(
-    innerPadding: PaddingValues,
     navController: NavHostController) {
-    val mContext = LocalContext.current
     NavHost(
         navController = navController,
         startDestination = "Home"
     ) {
         composable("Home") {
-            mContext.startActivity(Intent(mContext, HomeScreen::class.java))
+            HomePage(navController)
+//            mContext.startActivity(Intent(mContext, HomeScreen::class.java))
         }
         composable("Insights") {
-            mContext.startActivity(Intent(mContext, InsightsPage::class.java))
+            InsightsScreen(navController)
+//            mContext.startActivity(Intent(mContext, InsightsPage::class.java))
         }
         composable("NutriCoach") {
             // To be implemented next assignment: NutriCoach Screen
@@ -236,7 +232,6 @@ fun MyNavHost(
     }
 }
 
-//@Preview(showBackground = true)
 @Composable
 fun BottomBar(navController: NavHostController) {
     var selectedItem by remember { mutableStateOf(0) }
