@@ -66,15 +66,17 @@ fun LoginScreen(modifier: Modifier = Modifier) {
     var userPhone by remember { mutableStateOf("") }
     var phoneNoError by remember { mutableStateOf(false) }
     var idList by remember { mutableStateOf(listOf<String>()) }
+
+    // Boolean where true is showing the DropdownMenu and false is closing it.
     var expanded by remember { mutableStateOf(false) }
     val mContext = LocalContext.current
 
+    // Is ran once.
     LaunchedEffect(Unit) {
         idList = readIDFromCSV(mContext, "data.csv")
     }
     Surface(
         modifier = Modifier.fillMaxSize()
-//        color =
     ) {
         Column(
             modifier = Modifier
@@ -125,7 +127,6 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                     modifier = Modifier.padding(start = 16.dp, top = 4.dp)
                 )
             }
-
             Spacer(modifier = Modifier.height(10.dp))
             // Phone number
             OutlinedTextField(
@@ -155,17 +156,17 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             Button(
                 onClick = {
                     if (validateLogin(mContext, "data.csv", userId, userPhone)) {
+                        // Success message
                         Toast.makeText(mContext, "Login Successful", Toast.LENGTH_LONG).show()
-
                         // Store the ID at shared preference
                         val sharedPref = mContext.getSharedPreferences("Assignment1",
                             Context.MODE_PRIVATE).edit()
                         sharedPref.putString("id", userId)
                         sharedPref.apply()
-
                         // Move to the next page
                         mContext.startActivity(Intent(mContext, QuestionnairePage::class.java))
                     } else {
+                        // Error message
                         Toast.makeText(mContext, "Incorrect Credentials", Toast.LENGTH_LONG).show()
                     }
                 }
@@ -176,9 +177,13 @@ fun LoginScreen(modifier: Modifier = Modifier) {
     }
 }
 
+/**
+ * Function for to validate the login attempt.
+ * It checks if the ID matches the appropriate phone number.
+ */
 fun validateLogin(context: Context, fileName: String, userId: String, userPhone: String): Boolean {
     val assets = context.assets
-    var isValidUser = false //Initial var to false
+    var isValidUser = false // Initialise to false
 
     try {
         val inputStream = assets.open(fileName)
@@ -186,8 +191,10 @@ fun validateLogin(context: Context, fileName: String, userId: String, userPhone:
         val reader = BufferedReader(InputStreamReader(inputStream))
         //Read CSV by line
         reader.useLines { lines ->
-            lines.drop(1).forEach { line -> // Drop the header
-                val values = line.split(",") // Read data per line seperated by comma
+            // Drop the header
+            lines.drop(1).forEach { line ->
+                // Read data per line separated by comma
+                val values = line.split(",")
                 if (values.size > 1 && values[0] == userPhone && values[1] == userId ){
                     isValidUser = true
                     return@forEach
@@ -200,6 +207,9 @@ fun validateLogin(context: Context, fileName: String, userId: String, userPhone:
     return isValidUser
 }
 
+/**
+ * Function for the dropdown menu.
+ */
 fun readIDFromCSV(context: Context, fileName: String): List<String> {
     val ids = mutableListOf<String>()
     val assets = context.assets
@@ -207,10 +217,12 @@ fun readIDFromCSV(context: Context, fileName: String): List<String> {
     try {
         val inputStream = assets.open(fileName)
         val reader = BufferedReader(InputStreamReader(inputStream))
-
+        //Read CSV by line
         reader.useLines { lines ->
-            lines.drop(1).forEach { line -> // Drop the header
-                val values = line.split(",") // Read data per line seperated by comma
+            // Drop the header
+            lines.drop(1).forEach { line ->
+                // Read data per line separated by comma
+                val values = line.split(",")
                 if (values.size > 1) {
                     val id = values[1]
                     ids.add(id)

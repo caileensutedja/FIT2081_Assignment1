@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.Intent.ACTION_SEND
 import android.os.Bundle
+import android.widget.ProgressBar
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -19,7 +20,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
@@ -36,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fit2081.fit2081_a1_caileen_34375783.ui.theme.FIT2081_A1_Caileen_34375783Theme
+import com.fit2081.fit2081_a1_caileen_34375783.ui.theme.Purple40
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -621,7 +625,7 @@ fun check() {
         Row (
             modifier = Modifier.padding(start = 15.dp)
         ){
-            mySlider(x = 2f, y = 5f)
+            myProgressBar(x = 2f, y = 5f)
         }
 
         Spacer(modifier = Modifier.height(35.dp))
@@ -658,6 +662,8 @@ fun check() {
                     text = "Improve my diet!"
                 )
             }
+
+            myProgressBar(1.4f,5f)
         }
     }
 }
@@ -692,6 +698,22 @@ fun mySlider(x: Float, y: Float) {
 //        println("alternate : ${(String.format("%.2f", (sliderPosition * y)))}/${y.toInt()}")
     }
 }
+
+@Composable
+fun myProgressBar(x: Float, y: Float){
+    Row(modifier = Modifier.fillMaxWidth()){
+        LinearProgressIndicator(
+            progress = { x/y },
+            color = Purple40,
+            trackColor = Color.LightGray,
+        )
+        Spacer(modifier = Modifier.width(15.dp))
+        // Print value over total on the side
+        Text(text = "${x.toInt()}/${y.toInt()}",
+            fontSize = 10.sp)
+    }
+}
+
 
 
 /**

@@ -4,7 +4,6 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -36,7 +35,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -50,7 +48,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -74,19 +71,19 @@ class QuestionnairePage : ComponentActivity() {
                         TopAppBar()
                         QuestionnaireScreen()
                     }
-                    }
-
-            }
+                }
             }
         }
+    }
 }
 
-
+/**
+ * Top app bar.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun TopAppBar() {
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val context = LocalContext.current
 
     CenterAlignedTopAppBar(
@@ -96,24 +93,18 @@ fun TopAppBar() {
         ),
         title = {
             Text( text = "Food Intake Questionnaire",
-                fontWeight = FontWeight.Bold,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+                fontWeight = FontWeight.Bold)
         },
         navigationIcon = {
             IconButton(onClick = {
-                val intent = Intent(context, LoginPage::class.java)
-                context.startActivity(intent)
-                (context as? ComponentActivity)?.finish()
+                context.startActivity(Intent(context, LoginPage::class.java))
             }) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Back"
                 )
             }
-        },
-        scrollBehavior = scrollBehavior,
+        }
     )
 }
 
@@ -146,7 +137,7 @@ fun QuestionnaireScreen(){
     val mTimeSleepPickerDialog = timePickerFun(mTimeSleep)
     val mTimeWakeUpPickerDialog = timePickerFun(mTimeWakeUp)
 
-    // Use LaunchedEffect or remember Saveable if you want to restore once
+    // Use LaunchedEffect to restore once.
     // Runs the first time the function runs, not at every change (as it is composable)
     LaunchedEffect (Unit) {
         val sharedPref = mContext.getSharedPreferences("Assignment1", Context.MODE_PRIVATE)
@@ -171,7 +162,6 @@ fun QuestionnaireScreen(){
         mTimeSleep.value = loadedTimeSleep.toString()
         mTimeWakeUp.value = loadedTimeWakeUp.toString()
     }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -179,7 +169,6 @@ fun QuestionnaireScreen(){
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-
         HorizontalDivider()
         Spacer(modifier = Modifier.height(8.dp))
         Text(
@@ -198,16 +187,12 @@ fun QuestionnaireScreen(){
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(2.dp)
             ) {
-                // Column 1
+                // Column 1: Fruits, Red Meat, Fish
                 Column(horizontalAlignment = Alignment.Start) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(
                             checked = mCheckBoxFruits.value,
-                            onCheckedChange = {
-                                mCheckBoxFruits.value = it
-                                Log.d("mCheckBoxFruits",it.toString())
-                                Log.d("mCheckBoxFruits",mCheckBoxFruits.value.toString())
-                            })
+                            onCheckedChange = { mCheckBoxFruits.value = it })
                         Text(text = "Fruits")
                     }
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -225,32 +210,27 @@ fun QuestionnaireScreen(){
                         Text(text = "Fish")
                     }
                 }
-//                                     Column 2
+                // Column 2: Vegetables, Seafood, Eggs
                 Column(horizontalAlignment = Alignment.Start) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(
                             checked = mCheckBoxVegetables.value,
-                            onCheckedChange = {
-                                mCheckBoxVegetables.value = it
-                            })
+                            onCheckedChange = { mCheckBoxVegetables.value = it })
                         Text(text = "Vegetables")
                     }
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Checkbox(
-                            checked = mCheckBoxSeafood.value,
-                            onCheckedChange = { mCheckBoxSeafood.value = it }
-                        )
+                        Checkbox(checked = mCheckBoxSeafood.value,
+                            onCheckedChange = { mCheckBoxSeafood.value = it })
                         Text(text = "Seafood")
                     }
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(
                             checked = mCheckBoxEggs.value,
-                            onCheckedChange = { mCheckBoxEggs.value = it }
-                        )
+                            onCheckedChange = { mCheckBoxEggs.value = it })
                         Text(text = "Eggs")
                     }
                 }
-                // Column 3
+                // Column 3: Grains, Poultry, Nuts/Seeds
                 Column(horizontalAlignment = Alignment.Start) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(
@@ -261,15 +241,13 @@ fun QuestionnaireScreen(){
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(
                             checked = mCheckBoxPoultry.value,
-                            onCheckedChange = { mCheckBoxPoultry.value = it }
-                        )
+                            onCheckedChange = { mCheckBoxPoultry.value = it })
                         Text(text = "Poultry")
                     }
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(
                             checked = mCheckBoxNutsSeeds.value,
-                            onCheckedChange = { mCheckBoxNutsSeeds.value = it }
-                        )
+                            onCheckedChange = { mCheckBoxNutsSeeds.value = it })
                         Text(text = "Nuts/Seeds")
                     }
                 }
@@ -293,6 +271,7 @@ fun QuestionnaireScreen(){
         Persona()
         Spacer(modifier = Modifier.padding(10.dp))
         HorizontalDivider()
+        Spacer(modifier = Modifier.padding(3.dp))
         // Persona Choice
         Text(
             text = "Which persona best fits you?",
@@ -328,22 +307,23 @@ fun QuestionnaireScreen(){
                     onClick = {
                         mSelectedPersona = persona
                         expanded = false
-                    })
+                    }
+                )
             }
         }
         Spacer(modifier = Modifier.padding(10.dp))
+        // Timings
         Text(
             text = "Timings",
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Start,
             fontSize = 15.sp
         )
-        // Timings
+        // Time Pickers
         Row(modifier = Modifier.fillMaxWidth()) {
             Column(
                 modifier = Modifier.fillMaxWidth(0.65f),
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.spacedBy(0.dp)
+                horizontalAlignment = Alignment.Start
             ) {
                 Text(
                     "What time of day approx. do you normally eat your biggest meal?",
@@ -369,22 +349,19 @@ fun QuestionnaireScreen(){
                 Button(onClick = { mTimeMealPickerDialog.show()}) {
                     Text("Pick Time", fontSize = 10.sp)
                 }
-//                                    Spacer(modifier = Modifier.height(2.dp))
                 Text(text = "Selected time: ${mTimeMeal.value}", fontSize = 7.sp,
                     modifier = Modifier.padding(1.dp))
                 Button(onClick = { mTimeSleepPickerDialog.show() }) {
                     Text("Pick Time", fontSize = 10.sp)
                 }
-//                                    Spacer(modifier = Modifier.height(2.dp))
                 Text(text = "Selected time: ${mTimeSleep.value}", fontSize = 7.sp)
                 Button(onClick = { mTimeWakeUpPickerDialog.show() }) {
                     Text("Pick Time", fontSize = 10.sp)
                 }
-//                                    Spacer(modifier = Modifier.height(2.dp))
                 Text(text = "Selected time: ${mTimeWakeUp.value}", fontSize = 7.sp)
             }
         }
-
+        // Save Button
         Row {
             Button(onClick = {
                 val sharedPref = mContext.getSharedPreferences("Assignment1",
@@ -399,9 +376,7 @@ fun QuestionnaireScreen(){
                 sharedPref.putBoolean("fish", mCheckBoxFish.value)
                 sharedPref.putBoolean("eggs", mCheckBoxEggs.value)
                 sharedPref.putBoolean("nutsSeeds", mCheckBoxNutsSeeds.value)
-
                 sharedPref.putString("persona", mSelectedPersona)
-
                 sharedPref.putString("timeMeal", mTimeMeal.value)
                 sharedPref.putString("timeSleep", mTimeSleep.value)
                 sharedPref.putString("timeWakeUp", mTimeWakeUp.value)
@@ -413,11 +388,9 @@ fun QuestionnaireScreen(){
                 Text(text = "Save")
             }
         }
-
-
     }
-
 }
+
 @Composable
 fun Persona(){
     var showDialogHealthDevotee by remember { mutableStateOf(false) }
@@ -452,12 +425,12 @@ fun Persona(){
                             text = "I’m passionate about healthy eating & health plays a big part in my life. I use social media to follow active lifestyle personalities or get new recipes/exercise ideas. I may even buy superfoods or follow a particular type of diet. I like to think I am super healthy.",
                             textAlign = TextAlign.Center,
                             fontSize = 13.sp)
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Button(onClick = {showDialogHealthDevotee = false}) {
+                            Text("Dismiss") }
                     }
-               },
-                dismissButton = {
-                    Button(onClick = {showDialogHealthDevotee = false}) {
-                        Text("Dismiss") }
-                }
+
+               }
             )
         }
         Button(onClick = {showDialogMindfulEater = true}) { Text("Mindful Eater", fontSize = 10.sp) }
@@ -485,13 +458,13 @@ fun Persona(){
                             text = "I’m health-conscious and being healthy and eating healthy is important to me. Although health means different things to different people, I make conscious lifestyle decisions about eating based on what I believe healthy means. I look for new recipes and healthy eating information on social media.",
                             textAlign = TextAlign.Center,
                             fontSize = 13.sp)
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Button(onClick = {showDialogMindfulEater = false}) {
+                            Text("Dismiss") }
                     }
-                },
-                dismissButton = {
-                    Button(onClick = {showDialogMindfulEater = false}) {
-                        Text("Dismiss") }
                 }
-            )        }
+            )
+        }
         Button(onClick = {showDialogWellnessStriver = true}) { Text("Wellness Striver", fontSize = 10.sp) }
         if (showDialogWellnessStriver){
             AlertDialog(
@@ -517,14 +490,14 @@ fun Persona(){
                             text = "I aspire to be healthy (but struggle sometimes). Healthy eating is hard work! I’ve tried to improve my diet, but always find things that make it difficult to stick with the changes. Sometimes I notice recipe ideas or healthy eating hacks, and if it seems easy enough, I’ll give it a go.",
                             textAlign = TextAlign.Center,
                             fontSize = 13.sp)
-                    }
-                },
-                dismissButton = {
-                    Button(onClick = {showDialogWellnessStriver = false},
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Button(onClick = {showDialogWellnessStriver = false},
                         ) {
-                        Text("Dismiss") }
+                            Text("Dismiss") }
+                    }
                 }
-            )            }
+            )
+        }
     }
     Row {
         Button(onClick = {showDialogBalanceSeeker = true}) { Text("Balance Seeker", fontSize = 10.sp) }
@@ -552,13 +525,13 @@ fun Persona(){
                             text = "I try and live a balanced lifestyle, and I think that all foods are okay in moderation. I shouldn’t have to feel guilty about eating a piece of cake now and again. I get all sorts of inspiration from social media like finding out about new restaurants, fun recipes and sometimes healthy eating tips.",
                             textAlign = TextAlign.Center,
                             fontSize = 13.sp)
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Button(onClick = {showDialogBalanceSeeker = false}) {
+                            Text("Dismiss") }
                     }
-                },
-                dismissButton = {
-                    Button(onClick = {showDialogBalanceSeeker = false}) {
-                        Text("Dismiss") }
                 }
-            )            }
+            )
+        }
         Button(onClick = {showDialogHealthProcrastinator = true}) { Text("Health Procrastinator", fontSize = 10.sp) }
         if (showDialogHealthProcrastinator){
             AlertDialog(
@@ -584,13 +557,13 @@ fun Persona(){
                             text = "I’m contemplating healthy eating but it’s not a priority for me right now. I know the basics about what it means to be healthy, but it doesn’t seem relevant to me right now. I have taken a few steps to be healthier but I am not motivated to make it a high priority because I have too many other things going on in my life.",
                             textAlign = TextAlign.Center,
                             fontSize = 13.sp)
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Button(onClick = {showDialogHealthProcrastinator = false}) {
+                            Text("Dismiss") }
                     }
-                },
-                dismissButton = {
-                    Button(onClick = {showDialogHealthProcrastinator = false}) {
-                        Text("Dismiss") }
                 }
-            )            }
+            )
+        }
         Button(onClick = {showDialogFoodCarefree = true}) { Text("Food Carefree", fontSize = 10.sp) }
         if (showDialogFoodCarefree){
             AlertDialog(
@@ -615,13 +588,11 @@ fun Persona(){
                         Text(
                             text = "I’m not bothered about healthy eating. I don’t really see the point and I don’t think about it. I don’t really notice healthy eating tips or recipes and I don’t care what I eat.",
                             textAlign = TextAlign.Center,
-                            fontSize = 13.sp
-                        )
+                            fontSize = 13.sp)
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Button(onClick = {showDialogFoodCarefree = false}) {
+                            Text("Dismiss") }
                     }
-                },
-                dismissButton = {
-                    Button(onClick = {showDialogFoodCarefree = false}) {
-                        Text("Dismiss") }
                 }
             )
         }
@@ -643,13 +614,12 @@ fun timePickerFun(mTime: MutableState<String>): TimePickerDialog {
     mCalendar.time = Calendar.getInstance().time
     // Return a TimePickerDialog
     return TimePickerDialog(
-        // Context
-        // Listener to be invoked when the time is set
-        // Initial hour and minute
-        // Whether to use 24-hour format
         mContext,
+        // Invoke listener when time is set
         { _, mHour: Int, mMinute: Int ->
+            // initial hour and minute
             mTime.value = "$mHour:$mMinute"
+        // To user 24h format or not
         }, mHour, mMinute, false
     )
 }
