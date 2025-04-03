@@ -35,7 +35,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.fit2081.fit2081_a1_caileen_34375783.ui.theme.FIT2081_A1_Caileen_34375783Theme
 
@@ -108,8 +109,7 @@ fun HomePage(navController: NavHostController) {
             Text(
                 text = "You've already filled in your Food intake Questionnaire, but you can change details here:",
                 fontSize = 12.sp,
-                modifier = Modifier.fillMaxWidth(0.75f),
-
+                modifier = Modifier.fillMaxWidth(0.75f)
             )
             Button (
                 onClick = {
@@ -147,8 +147,6 @@ fun HomePage(navController: NavHostController) {
             )
             Button(onClick = {
                 navController.navigate("Insights")
-//                InsightsScreen()
-//                mContext.startActivity(Intent(mContext, InsightsPage::class.java))
             },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
 
@@ -216,11 +214,9 @@ fun MyNavHost(
     ) {
         composable("Home") {
             HomePage(navController)
-//            mContext.startActivity(Intent(mContext, HomeScreen::class.java))
         }
         composable("Insights") {
             InsightsScreen(navController)
-//            mContext.startActivity(Intent(mContext, InsightsPage::class.java))
         }
         composable("NutriCoach") {
             // To be implemented next assignment: NutriCoach Screen
@@ -234,7 +230,8 @@ fun MyNavHost(
 
 @Composable
 fun BottomBar(navController: NavHostController) {
-    var selectedItem by remember { mutableStateOf(0) }
+    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+    var selectedItem by remember { mutableIntStateOf(0) }
 
     val items = listOf(
         "Home",
@@ -251,17 +248,14 @@ fun BottomBar(navController: NavHostController) {
                             Icons.Filled.Home,
                             contentDescription = "Home"
                         )
-
                         "Insights" -> Icon(
                             Icons.Outlined.Info,
                             contentDescription = "Insights"
                         )
-
                         "NutriCoach" -> Icon(
                             Icons.Rounded.Person,
                             contentDescription = "NutriCoach"
                         )
-
                         "Settings" -> Icon(
                             Icons.Filled.Settings,
                             contentDescription = "Settings"
@@ -271,10 +265,22 @@ fun BottomBar(navController: NavHostController) {
                 label = {
                     Text(item)
                 },
-                selected = selectedItem == index,
+                // This tracks the current route dynamically
+                selected = currentRoute == item,
                 onClick = {
+                    // Update which item is visually selected (shadow)
                     selectedItem = index
-                    navController.navigate(item)
+                    // Navigates to the selected item
+                    navController.navigate(item) {
+                        // Prevents backtracking to not stack the screens multiple times
+                        popUpTo(navController.graph.startDestinationId) {
+                            // Doesn't remove the "home screen" but everything after it
+                            inclusive = false
+                        }
+                        // Ensures the destination is on top
+                        // Example: Home -> Home -> Home to just Home
+                        launchSingleTop = true
+                    }
                 }
             )
         }
