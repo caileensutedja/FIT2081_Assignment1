@@ -100,7 +100,7 @@ fun InsightsScreen(navController: NavHostController) {
         ) {
             Text(
                 text = "Vegetables",
-                fontSize = 11.sp,
+                fontSize = 10.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth(0.3f).padding(start = 15.dp)
             )
@@ -119,7 +119,7 @@ fun InsightsScreen(navController: NavHostController) {
         ) {
             Text(
                 text = "Fruits",
-                fontSize = 11.sp,
+                fontSize = 10.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth(0.3f).padding(start = 15.dp)
             )
@@ -138,7 +138,7 @@ fun InsightsScreen(navController: NavHostController) {
         ) {
             Text(
                 text = "Grains and Cereals",
-                fontSize = 11.sp,
+                fontSize = 10.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth(0.3f).padding(start = 15.dp)
             )
@@ -157,7 +157,7 @@ fun InsightsScreen(navController: NavHostController) {
         ) {
             Text(
                 text = "Whole Grains",
-                fontSize = 11.sp,
+                fontSize = 10.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth(0.3f).padding(start = 15.dp)
             )
@@ -176,7 +176,7 @@ fun InsightsScreen(navController: NavHostController) {
         ) {
             Text(
                 text = "Meat and Alternatives",
-                fontSize = 11.sp,
+                fontSize = 10.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth(0.3f).padding(start = 15.dp)
             )
@@ -195,7 +195,7 @@ fun InsightsScreen(navController: NavHostController) {
         ) {
             Text(
                 text = "Dairy",
-                fontSize = 11.sp,
+                fontSize = 10.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth(0.3f).padding(start = 15.dp)
             )
@@ -214,7 +214,7 @@ fun InsightsScreen(navController: NavHostController) {
         ) {
             Text(
                 text = "Water",
-                fontSize = 11.sp,
+                fontSize = 10.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth(0.3f).padding(start = 15.dp)
             )
@@ -233,7 +233,7 @@ fun InsightsScreen(navController: NavHostController) {
         ) {
             Text(
                 text = "Unsaturated Fats",
-                fontSize = 11.sp,
+                fontSize = 10.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth(0.3f).padding(start = 15.dp)
             )
@@ -252,7 +252,7 @@ fun InsightsScreen(navController: NavHostController) {
         ) {
             Text(
                 text = "Sodium",
-                fontSize = 11.sp,
+                fontSize = 10.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth(0.3f).padding(start = 15.dp)
             )
@@ -271,7 +271,7 @@ fun InsightsScreen(navController: NavHostController) {
         ) {
             Text(
                 text = "Sugar",
-                fontSize = 11.sp,
+                fontSize = 10.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth(0.3f).padding(start = 15.dp)
             )
@@ -290,7 +290,7 @@ fun InsightsScreen(navController: NavHostController) {
         ) {
             Text(
                 text = "Alcohol",
-                fontSize = 11.sp,
+                fontSize = 10.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth(0.3f).padding(start = 15.dp)
             )
@@ -309,7 +309,7 @@ fun InsightsScreen(navController: NavHostController) {
         ) {
             Text(
                 text = "Discretionary Foods",
-                fontSize = 11.sp,
+                fontSize = 10.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth(0.3f).padding(start = 15.dp)
             )

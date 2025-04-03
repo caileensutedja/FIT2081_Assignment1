@@ -153,7 +153,7 @@ fun QuestionnaireScreen(){
         mCheckBoxNutsSeeds.value = sharedPref.getBoolean("nutsSeeds", false)
         mCheckBoxVegetables.value = sharedPref.getBoolean("vegetables", false)
 
-        val loadedPersona = sharedPref.getString("persona", "")
+        val loadedPersona = sharedPref.getString("persona", "Health Devotee")
         val loadedTimeMeal = sharedPref.getString("timeMeal", "12:00")
         val loadedTimeSleep = sharedPref.getString("timeSleep", "12:00")
         val loadedTimeWakeUp = sharedPref.getString("timeWakeUp", "12:00")
@@ -599,6 +599,9 @@ fun Persona(){
     }
 }
 
+/**
+ * The function timePickerFun was taken from FIT2081's Week 3.3 Lab.
+ */
 @Composable
 fun timePickerFun(mTime: MutableState<String>): TimePickerDialog {
     // Get the current context

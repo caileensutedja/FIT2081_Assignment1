@@ -70,6 +70,8 @@ fun LoginScreen(modifier: Modifier = Modifier) {
     // Boolean where true is showing the DropdownMenu and false is closing it.
     var expanded by remember { mutableStateOf(false) }
     val mContext = LocalContext.current
+    val haveLogin = remember { mutableStateOf(false) }
+
 
     // Is ran once.
     LaunchedEffect(Unit) {
@@ -159,10 +161,10 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                         // Success message
                         Toast.makeText(mContext, "Login Successful", Toast.LENGTH_LONG).show()
                         // Store the ID at shared preference
-                        val sharedPref = mContext.getSharedPreferences("Assignment1",
+                        val sharedPrefPut = mContext.getSharedPreferences("Assignment1",
                             Context.MODE_PRIVATE).edit()
-                        sharedPref.putString("id", userId)
-                        sharedPref.apply()
+                        sharedPrefPut.putString("id", userId)
+                        sharedPrefPut.apply()
                         // Move to the next page
                         mContext.startActivity(Intent(mContext, QuestionnairePage::class.java))
                     } else {

@@ -228,6 +228,13 @@ fun MyNavHost(
     }
 }
 
+/**
+ * AI Declaration
+ *
+ * I used ChatGPT to help me understand how I can have the shadow following "Insights"
+ * when after I click on "See my scores" as the shadow was still on 'Home', then I tried
+ * implementing it on my own with comments.
+ */
 @Composable
 fun BottomBar(navController: NavHostController) {
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
