@@ -4,6 +4,7 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -153,10 +154,10 @@ fun QuestionnaireScreen(){
         mCheckBoxNutsSeeds.value = sharedPref.getBoolean("nutsSeeds", false)
         mCheckBoxVegetables.value = sharedPref.getBoolean("vegetables", false)
 
-        val loadedPersona = sharedPref.getString("persona", "Health Devotee")
-        val loadedTimeMeal = sharedPref.getString("timeMeal", "12:00")
-        val loadedTimeSleep = sharedPref.getString("timeSleep", "12:00")
-        val loadedTimeWakeUp = sharedPref.getString("timeWakeUp", "12:00")
+        val loadedPersona = sharedPref.getString("persona", "")
+        val loadedTimeMeal = sharedPref.getString("timeMeal", "")
+        val loadedTimeSleep = sharedPref.getString("timeSleep", "")
+        val loadedTimeWakeUp = sharedPref.getString("timeWakeUp", "")
         mSelectedPersona = loadedPersona.toString()
         mTimeMeal.value = loadedTimeMeal.toString()
         mTimeSleep.value = loadedTimeSleep.toString()
@@ -363,26 +364,31 @@ fun QuestionnaireScreen(){
         // Save Button
         Row {
             Button(onClick = {
-                val sharedPref = mContext.getSharedPreferences("Assignment1",
-                    Context.MODE_PRIVATE).edit()
+                if (mSelectedPersona.isNotEmpty() && mTimeMeal.value.isNotEmpty() && mTimeSleep.value.isNotEmpty() && mTimeWakeUp.value.isNotEmpty()){
+                    val sharedPref = mContext.getSharedPreferences("Assignment1", Context.MODE_PRIVATE).edit()
 
-                sharedPref.putBoolean("fruits", mCheckBoxFruits.value)
-                sharedPref.putBoolean("vegetables", mCheckBoxVegetables.value)
-                sharedPref.putBoolean("grains", mCheckBoxGrains.value)
-                sharedPref.putBoolean("redMeat", mCheckBoxRedMeat.value)
-                sharedPref.putBoolean("seafood", mCheckBoxSeafood.value)
-                sharedPref.putBoolean("poultry", mCheckBoxPoultry.value)
-                sharedPref.putBoolean("fish", mCheckBoxFish.value)
-                sharedPref.putBoolean("eggs", mCheckBoxEggs.value)
-                sharedPref.putBoolean("nutsSeeds", mCheckBoxNutsSeeds.value)
-                sharedPref.putString("persona", mSelectedPersona)
-                sharedPref.putString("timeMeal", mTimeMeal.value)
-                sharedPref.putString("timeSleep", mTimeSleep.value)
-                sharedPref.putString("timeWakeUp", mTimeWakeUp.value)
+                    sharedPref.putBoolean("fruits", mCheckBoxFruits.value)
+                    sharedPref.putBoolean("vegetables", mCheckBoxVegetables.value)
+                    sharedPref.putBoolean("grains", mCheckBoxGrains.value)
+                    sharedPref.putBoolean("redMeat", mCheckBoxRedMeat.value)
+                    sharedPref.putBoolean("seafood", mCheckBoxSeafood.value)
+                    sharedPref.putBoolean("poultry", mCheckBoxPoultry.value)
+                    sharedPref.putBoolean("fish", mCheckBoxFish.value)
+                    sharedPref.putBoolean("eggs", mCheckBoxEggs.value)
+                    sharedPref.putBoolean("nutsSeeds", mCheckBoxNutsSeeds.value)
+                    sharedPref.putString("persona", mSelectedPersona)
+                    sharedPref.putString("timeMeal", mTimeMeal.value)
+                    sharedPref.putString("timeSleep", mTimeSleep.value)
+                    sharedPref.putString("timeWakeUp", mTimeWakeUp.value)
 
-                sharedPref.apply()
+                    sharedPref.apply()
 
-                mContext.startActivity(Intent(mContext, HomeScreen::class.java))
+                    mContext.startActivity(Intent(mContext, HomeScreen::class.java))
+            } else {
+                    // Error message to fill in the questionnaire.
+                    Toast.makeText(mContext, "Please complete all parts of the questionnaire.", Toast.LENGTH_LONG).show()
+
+                }
             }){
                 Text(text = "Save")
             }

@@ -227,7 +227,26 @@ fun InsightsScreen(navController: NavHostController) {
         }
         Spacer(modifier = Modifier.height(10.dp))
 
-        // 8. Unsaturated Fats
+        // 8a. Saturated Fats
+        Row (
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "Saturated Fats",
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.fillMaxWidth(0.3f).padding(start = 15.dp)
+            )
+            Spacer(modifier = Modifier.fillMaxWidth(0.1f))
+            if (isFemale) {
+                MySlider(x = userData[58].toFloat(), y = 5f)
+            } else {
+                MySlider(x = userData[57].toFloat(), y = 5f)
+            }
+        }
+        Spacer(modifier = Modifier.height(10.dp))
+
+        // 8b. Unsaturated Fats
         Row (
             modifier = Modifier.fillMaxWidth()
         ) {
