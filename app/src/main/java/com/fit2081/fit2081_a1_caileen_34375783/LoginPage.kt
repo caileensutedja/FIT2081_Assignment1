@@ -160,13 +160,38 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                     if (validateLogin(mContext, "data.csv", userId, userPhone)) {
                         // Success message
                         Toast.makeText(mContext, "Login Successful", Toast.LENGTH_LONG).show()
-                        // Store the ID at shared preference
-                        val sharedPrefPut = mContext.getSharedPreferences("Assignment1",
-                            Context.MODE_PRIVATE).edit()
-                        sharedPrefPut.putString("id", userId)
-                        sharedPrefPut.apply()
-                        // Move to the next page
-                        mContext.startActivity(Intent(mContext, QuestionnairePage::class.java))
+
+                        val sharedPrefGet = mContext.getSharedPreferences("Assignment1",
+                            Context.MODE_PRIVATE)
+                        val idStored = sharedPrefGet.getString("id", " ")
+
+                        if (idStored == userId) {
+                            mContext.startActivity(Intent(mContext, HomeScreen::class.java))
+                        } else {
+                            // Store the ID at shared preference
+                            val sharedPrefPut = mContext.getSharedPreferences(
+                                "Assignment1",
+                                Context.MODE_PRIVATE
+                            ).edit()
+                            // Set initial values (to be default)
+                            sharedPrefPut.putString("id", userId)
+                            sharedPrefPut.putBoolean("fruits", false)
+                            sharedPrefPut.putBoolean("vegetables", false)
+                            sharedPrefPut.putBoolean("grains", false)
+                            sharedPrefPut.putBoolean("redMeat", false)
+                            sharedPrefPut.putBoolean("seafood", false)
+                            sharedPrefPut.putBoolean("poultry", false)
+                            sharedPrefPut.putBoolean("fish", false)
+                            sharedPrefPut.putBoolean("eggs", false)
+                            sharedPrefPut.putBoolean("nutsSeeds", false)
+                            sharedPrefPut.putString("persona", "")
+                            sharedPrefPut.putString("timeMeal", "12:00")
+                            sharedPrefPut.putString("timeSleep", "12:00")
+                            sharedPrefPut.putString("timeWakeUp", "12:00")
+                            sharedPrefPut.apply()
+                            // Move to the next page
+                            mContext.startActivity(Intent(mContext, QuestionnairePage::class.java))
+                        }
                     } else {
                         // Error message
                         Toast.makeText(mContext, "Incorrect Credentials", Toast.LENGTH_LONG).show()
