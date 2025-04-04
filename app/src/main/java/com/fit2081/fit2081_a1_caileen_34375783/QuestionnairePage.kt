@@ -271,7 +271,6 @@ fun QuestionnaireScreen(){
         Persona()
         Spacer(modifier = Modifier.padding(10.dp))
         HorizontalDivider()
-        Spacer(modifier = Modifier.padding(3.dp))
         // Persona Choice
         Text(
             text = "Which persona best fits you?",
@@ -311,7 +310,7 @@ fun QuestionnaireScreen(){
                 )
             }
         }
-        Spacer(modifier = Modifier.padding(10.dp))
+        Spacer(modifier = Modifier.padding(5.dp))
         // Timings
         Text(
             text = "Timings",

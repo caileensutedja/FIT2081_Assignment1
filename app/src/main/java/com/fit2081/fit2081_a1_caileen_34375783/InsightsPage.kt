@@ -106,9 +106,9 @@ fun InsightsScreen(navController: NavHostController) {
             )
             Spacer(modifier = Modifier.fillMaxWidth(0.1f))
             if (isFemale) {
-                MySlider(x = userData[9].toFloat(), y = 5f)
+                MySlider(x = userData[9].toFloat(), y = 10f)
             } else {
-                MySlider(x = userData[8].toFloat(), y = 5f)
+                MySlider(x = userData[8].toFloat(), y = 10f)
             }
         }
         Spacer(modifier = Modifier.height(10.dp))
@@ -125,9 +125,9 @@ fun InsightsScreen(navController: NavHostController) {
             )
             Spacer(modifier = Modifier.fillMaxWidth(0.1f))
             if (isFemale) {
-                MySlider(x = userData[20].toFloat(), y = 5f)
+                MySlider(x = userData[20].toFloat(), y = 10f)
             } else {
-                MySlider(x = userData[19].toFloat(), y = 5f)
+                MySlider(x = userData[19].toFloat(), y = 10f)
             }
         }
         Spacer(modifier = Modifier.height(10.dp))
@@ -396,8 +396,7 @@ fun MySlider(x: Float, y: Float) {
         Slider(
             value = sliderPosition, // Sets slider position
             onValueChange = {},
-            valueRange = 0f..1f, // Always normalize between 0 and 1
-            modifier = Modifier.weight(1f).height(10.dp),
+            modifier = Modifier.weight(0.5f).height(10.dp),
             steps = 5, // Step of 5
             enabled = false // Can't edit
         )
@@ -405,7 +404,8 @@ fun MySlider(x: Float, y: Float) {
 
         // Print value over total on the right side as integers
         Text(text = "${(sliderPosition * y).toInt()}/${y.toInt()}",
-            fontSize = 10.sp)
+            fontSize = 10.sp,
+            modifier = Modifier.width(40.dp))
     }
 }
 
